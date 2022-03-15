@@ -1,4 +1,4 @@
-# Diversifying Content Generation for Commonsense Reasoning with Mixture of Knowledge Graph Experts
+# Diversifying Commonsense Reasoning Generation on Knowledge Graph
 
 ## Introduction
 
@@ -6,7 +6,7 @@ This is the pytorch implementation of our [ACL 2022](https://www.2022.aclweb.org
 In this paper, we propose MoKGE, a novel method that diversifies the generative reasoning by a mixture of expert (MoE) strategy on commonsense knowledge graphs (KG). 
 A set of knowledge experts seek diverse reasoning on KG to encourage various generation outputs.
 
-<img src="images/MoKGE.jpg" width="600" align=center> 
+<img src="images/MoKGE.jpg" width="800" align=center> 
 
 ## Requirements
 
@@ -78,4 +78,6 @@ python filter_triple.py $DATA
 
 ## Acknowledgements
 
-Many thanks to the Github repository of [Transformers](https://github.com/huggingface/transformers), [KagNet](https://github.com/INK-USC/KagNet) and [MultiGen](https://github.com/cdjhz/multigen). Part of our codes are modified based on their codes.
+Many thanks to the Github repository of [Transformers](https://github.com/huggingface/transformers), [KagNet](https://github.com/INK-USC/KagNet) and [MultiGen](https://github.com/cdjhz/multigen). 
+
+Part of our codes are modified based on their codes.
