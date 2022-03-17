@@ -1,14 +1,14 @@
-# Diversifying Commonsense Reasoning Generation on Knowledge Graph
+## Diversifying Commonsense Reasoning Generation on Knowledge Graph
 
 ## Introduction
 
-This is the pytorch implementation of our [ACL 2022](https://www.2022.aclweb.org/) paper "*Diversifying Content Generation for Commonsense Reasoning with Mixture of Knowledge Graph Experts*" [\[PDF\]](https://arxiv.org/abs/2203.07285). 
-In this paper, we propose MoKGE, a novel method that diversifies the generative reasoning by a mixture of expert (MoE) strategy on commonsense knowledge graphs (KG). 
+-- This is the pytorch implementation of our [ACL 2022](https://www.2022.aclweb.org/) paper "*Diversifying Content Generation for Commonsense Reasoning with Mixture of Knowledge Graph Experts*" [\[PDF\]](https://arxiv.org/abs/2203.07285). 
+In this paper, we propose MoKGE, a novel method that diversifies the generative commonsense reasoning by a mixture of expert (MoE) strategy on knowledge graphs (KG). 
 A set of knowledge experts seek diverse reasoning on KG to encourage various generation outputs.
 
-<img src="images/MoKGE.jpg" width="800" align=center> 
+<img src="logits/MoKGE.jpg" width="800" align=center> 
 
-## Requirements
+## Create an environment
 
 ```
 transformers==3.3.1
@@ -20,22 +20,15 @@ torch-scatter==2.0.5+${CUDA}
 psutil==5.9.0
 ```
 
-If `OSError: [E050] Can't find model 'en_core_web_sm'` occured:
-```
-python3 -m spacy download en_core_web_sm
-```
+-- For `torch-scatter`, `${CUDA}` should be replaced by either `cu101` `cu102` `cu110` or `cu111` depending on your PyTorch installation. For more information check [here](https://github.com/rusty1s/pytorch_scatter).
 
-For `torch-scatter`, `${CUDA}` should be replaced by either `cu101` `cu102` `cu110` or `cu111` depending on your PyTorch installation. 
-For more information check [here](https://github.com/rusty1s/pytorch_scatter).
+-- A docker environment could be downloaded from `wenhaoyu97/divgen:5.0`
 
+**We summarize some common environment installation problems and solutions [here](logits/EnvIssues.pdf)**
 
-## Preprocessing
+## Preprocess the data
 
-Preprocessed datasets can be downloaded from [here]().
-
-Unzip the file and move it to `data`.
-
-Extract English ConceptNet and build graph.
+-- Extract English ConceptNet and build graph.
 
 ```bash
 cd data
@@ -46,7 +39,7 @@ python extract_cpnet.py
 python graph_construction.py
 ```
 
-Preprocessing multi-hop relational paths for the model. Set `$DATA` to either `anlg`, `eg`.
+-- Preprocess multi-hop relational paths. Set `$DATA` to either `anlg` or `eg`.
 
 ```bash
 export DATA=eg
@@ -57,7 +50,13 @@ python filter_triple.py $DATA
 
 ## Run Baseline
 
-**Coming Soon! Very likely before end of March! Stay tuned!**
+| Model Name | Train Model | Reference |
+| :---: | :---: | :---: |
+| Truncated Sampling | `bash scripts/TruncatedSampling.sh` | ACL 2018 [\[PDF\]](https://aclanthology.org/P18-1082.pdf) |
+| Nucleus Sampling | `bash scripts/NucleusSampling.sh` | ICLR 2020 [\[PDF\]](https://openreview.net/forum?id=rygGQyrFvH) |
+| Variational AutoEncoder | `bash scripts/VariationalAutoEncoder.sh` | AAAI 2018 [\[PDF\]](https://ojs.aaai.org/index.php/AAAI/article/view/11956) |
+| Mixture of Experts (Shen) | `bash scripts/MixtureOfExpertShen.sh` | ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
+| Mixture of Experts (Cho) | `bash scripts/MixtureOfExpertCho.sh` | EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
 
 ## Run MoKGE
 
