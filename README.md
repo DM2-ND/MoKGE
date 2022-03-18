@@ -50,17 +50,19 @@ python filter_triple.py $DATA
 
 ## Run Baseline
 
-| Model Name | Train Model | Reference |
-| :---: | :---: | :---: |
-| Truncated Sampling | `bash scripts/TruncatedSampling.sh` | ACL 2018 [\[PDF\]](https://aclanthology.org/P18-1082.pdf) |
-| Nucleus Sampling | `bash scripts/NucleusSampling.sh` | ICLR 2020 [\[PDF\]](https://openreview.net/forum?id=rygGQyrFvH) |
-| Variational AutoEncoder | `bash scripts/VariationalAutoEncoder.sh` | AAAI 2018 [\[PDF\]](https://ojs.aaai.org/index.php/AAAI/article/view/11956) |
-| Mixture of Experts (Shen) | `bash scripts/MixtureOfExpertShen.sh` | ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
-| Mixture of Experts (Cho) | `bash scripts/MixtureOfExpertCho.sh` | EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
+| Baseline Name | Run Baseline Model | Venue and Reference |
+| :--- | :--- | :--- |
+| Truncated Sampling | `bash scripts/TruncatedSampling.sh` | Fan et al., ACL 2018 [\[PDF\]](https://aclanthology.org/P18-1082.pdf) |
+| Nucleus Sampling | `bash scripts/NucleusSampling.sh` | Holtzman et al., ICLR 2020 [\[PDF\]](https://openreview.net/forum?id=rygGQyrFvH) |
+| Variational AutoEncoder | `bash scripts/VariationalAutoEncoder.sh` | Gupta et al., AAAI 2018 [\[PDF\]](https://ojs.aaai.org/index.php/AAAI/article/view/11956) |
+| Mixture of Experts (Shen) | `bash scripts/MixtureOfExpertShen.sh` | Shen et al., ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
+| Mixture of Experts (Cho) | `bash scripts/MixtureOfExpertCho.sh` | Cho et al., EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
 
 ## Run MoKGE
 
-**Coming Soon! Very likely before end of March! Stay tuned!**
+-- MoKGE-embed (Cho et al.,) `bash scripts/KGMixtureOfExpertCho.sh`
+
+-- MoKGE-prompt (shen et al.,) `bash scripts/KGMixtureOfExpertShen.sh`
 
 ## Citation
 

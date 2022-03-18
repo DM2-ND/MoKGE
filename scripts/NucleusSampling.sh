@@ -7,7 +7,6 @@ INPUT_DIR=${}
 OUTPUT_DIR=${}
 P=${} # Nucleus Prob: 0.5 / 0.75 / 0.95 ...
 
-
 option="
     --data_dir ${INPUT_DIR}/${DATASET}
     --model_name_or_path facebook/bart-base  

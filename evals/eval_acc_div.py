@@ -85,7 +85,7 @@ def eval_entropy_distinct(hyp_path):
 
         for n in range(4):
             total = sum(counter[n].values()) + 1e-10
-            diversity_metrics[f'distint_{n+1}'] = (len(counter[n].values())+0.0) / total
+            diversity_metrics[f'distinct_{n+1}'] = (len(counter[n].values())+0.0) / total
 
         return diversity_metrics
 

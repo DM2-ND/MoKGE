@@ -10,13 +10,14 @@ option="
     --data_dir ${INPUT_DIR}/${DATASET}
     --model_name_or_path facebook/bart-base  
     --model_type kgmoe
-    --output_dir ${OUTPUT_DIR}/MixtureOfExpertShen_Output
+    --output_dir ${OUTPUT_DIR}/KGMixtureOfExpertCho_Output
     --max_source_length 40
     --max_target_length 60 
     --val_max_target_length 60
     --test_max_target_length 60
     --num_train_epochs 30
     --learning_rate 3e-5 
+    --mixture_embedding
     --fp16 
     --do_train 
     --do_eval 
