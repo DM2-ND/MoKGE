@@ -24,7 +24,7 @@ psutil==5.9.0
 
 -- A docker environment could be downloaded from `wenhaoyu97/divgen:5.0`
 
-**We summarize some common environment installation problems and solutions [here](logits/EnvIssues.pdf)**
+**We summarize some common environment installation problems and solutions [\[here\]](logits/EnvIssues.pdf)**.
 
 ## Preprocess the data
 
@@ -55,10 +55,12 @@ python filter_triple.py $DATA
 | Truncated Sampling | `bash scripts/TruncatedSampling.sh` | Fan et al., ACL 2018 [\[PDF\]](https://aclanthology.org/P18-1082.pdf) |
 | Nucleus Sampling | `bash scripts/NucleusSampling.sh` | Holtzman et al., ICLR 2020 [\[PDF\]](https://openreview.net/forum?id=rygGQyrFvH) |
 | Variational AutoEncoder | `bash scripts/VariationalAutoEncoder.sh` | Gupta et al., AAAI 2018 [\[PDF\]](https://ojs.aaai.org/index.php/AAAI/article/view/11956) |
-| Mixture of Experts (Shen) | `bash scripts/MixtureOfExpertShen.sh` | Shen et al., ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
-| Mixture of Experts (Cho) | `bash scripts/MixtureOfExpertCho.sh` | Cho et al., EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
+| Mixture of Experts (embed) | `bash scripts/MixtureOfExpertCho.sh` | Cho et al., EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
+| Mixture of Experts (prompt) | `bash scripts/MixtureOfExpertShen.sh` | Shen et al., ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
 
 ## Run MoKGE
+
+Independently parameterizing each expert may exacerbate overfitting since the number of parameters increases linearly with the number of experts. We follow the parameter sharing schema in Cho et al., (2019); Shen et al., (2019) to avoid this issue. This only requires a negligible increase in parameters over the baseline model that does not uses MoE. Speficially, Cho et al., added a unique expert embedding to each input token, while Shen et al., added an expert prefix token before the input text sequence.
 
 -- MoKGE-embed (Cho et al.,) `bash scripts/KGMixtureOfExpertCho.sh`
 

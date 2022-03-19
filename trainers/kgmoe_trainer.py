@@ -132,7 +132,7 @@ class KGMoESeq2SeqTrainer(Seq2SeqTrainer):
         else:
             loss.backward()
 
-        return loss.detach(), mixture_ids
+        return loss.detach()
 
     def compute_loss(self, model, inputs):
         

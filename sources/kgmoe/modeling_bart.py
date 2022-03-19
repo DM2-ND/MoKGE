@@ -41,7 +41,7 @@ from transformers.modeling_bart import (
     LearnedPositionalEmbedding,
 )
 
-from models.kgmoe.graph_layer import GraphEncoder
+from sources.kgmoe.graph_layer import GraphEncoder
 
 logger = logging.get_logger(__name__)
 

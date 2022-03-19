@@ -12,8 +12,6 @@ from transformers import (
 )
 
 from trainers.trainer_utils import (
-    LegacySeq2SeqDataset,
-    Seq2SeqDataCollator,
     assert_all_frozen,
     freeze_embeds,
     freeze_params,
@@ -77,7 +75,6 @@ class DataTrainingArguments:
     src_lang: Optional[str] = field(default=None, metadata={"help": "Source language id for translation."})
     tgt_lang: Optional[str] = field(default=None, metadata={"help": "Target language id for translation."})
     eval_beams: Optional[int] = field(default=None, metadata={"help": "# num_beams to use for evaluation."})
-    metric_for_best_model: Optional[str] = field(default='distinct_2', metadata={"help": "metric for saving best model on dev set."})
 
     # For sampling methods
     top_k: Optional[int] = field(default=0, metadata={"help": "keep only top k tokens with highest probability (top-k filtering)"})
@@ -106,17 +103,18 @@ def main():
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
+    from trainers.trainer_utils import LegacySeq2SeqDataset, Seq2SeqDataCollator
     if model_args.model_type == 'vae':
-        from models.vae.configuration_bart import BartVAEConfig as BartConfig
-        from models.vae.modeling_bart import BartVAEForConditionalGeneration as BartModel
+        from sources.vae.configuration_bart import BartVAEConfig as BartConfig
+        from sources.vae.modeling_bart import BartVAEForConditionalGeneration as BartModel
         from trainers.vae_trainer import VAESeq2SeqTrainer as Seq2SeqTrainer
     elif model_args.model_type == 'moe':
         from transformers import BartConfig
-        from models.moe.modeling_bart import BartMoEForConditionalGeneration as BartModel
-        from trainers.kgmoe_trainer import MoESeq2SeqTrainer as Seq2SeqTrainer
+        from sources.moe.modeling_bart import BartMoEForConditionalGeneration as BartModel
+        from trainers.moe_trainer import MoESeq2SeqTrainer as Seq2SeqTrainer
     elif model_args.model_type == 'kgmoe':
         from transformers import BartConfig
-        from models.kgmoe.modeling_bart import BartKGMoEForConditionalGeneration as BartModel
+        from sources.kgmoe.modeling_bart import BartKGMoEForConditionalGeneration as BartModel
         from trainers.kgmoe_trainer import KGMoESeq2SeqTrainer as Seq2SeqTrainer
         from trainers.kgtrainer_utils import LegacySeq2SeqDataset, Seq2SeqDataCollator
     elif model_args.model_type == 'sampling':
@@ -128,6 +126,7 @@ def main():
             f"model type ({model_args.model_type}) has not been implemented or the name model type is incorrect."
         )
     from transformers import BartTokenizer
+
     # n_sample for evluating the models during training
     training_args.eval_beams = data_args.eval_beams
     training_args.data_dir = data_args.data_dir
@@ -152,7 +151,6 @@ def main():
         training_args.local_rank, training_args.device, training_args.n_gpu,
         bool(training_args.local_rank != -1), training_args.fp16,
     )
-    logger.info("Training/evaluation parameters %s", training_args)
 
     set_seed(training_args.seed)
 

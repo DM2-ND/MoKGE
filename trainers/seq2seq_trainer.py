@@ -340,10 +340,10 @@ class Seq2SeqTrainer(Trainer):
                 with open(out_pred_metric, 'w') as metric_out:
                     json.dump(metrics, metric_out, indent=1)
 
-                ''' save the model '''
-                if metrics[self.args.metric_for_best_model] > self.best_metric:
-                    self.best_metric = metrics[self.args.metric_for_best_model]
-                    self._save_training(model, trial, metrics=metrics)
+                # ''' save the model '''
+                # if metrics[self.args.metric_for_best_model] > self.best_metric:
+                #     self.best_metric = metrics[self.args.metric_for_best_model]
+                #     self._save_training(model, trial, metrics=metrics)
 
             if self.args.max_steps > 0 and self.global_step >= self.args.max_steps:
                 break
