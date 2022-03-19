@@ -32,5 +32,5 @@ option="
 
 cmd="python3 main.py ${option}"
 
-cd ..
+echo $cmd
 eval $cmd
