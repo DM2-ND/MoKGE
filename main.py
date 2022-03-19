@@ -91,8 +91,8 @@ class DataTrainingArguments:
     expert_id: Optional[int] = field(default=5e4, metadata={"help": "specify a token as expert token"})
 
     # For KGMoE methods
-    pows: Optional[float] = field(default=6, metadata={"help": "specify a token as expert token"})
-    loss_ratio: Optional[float] = field(default=0.2, metadata={"help": "specify a token as expert token"})
+    pows: Optional[float] = field(default=6.5, metadata={"help": "specify a token as expert token"})
+    loss_ratio: Optional[float] = field(default=0.3, metadata={"help": "specify a token as expert token"})
     
 def main():
 
