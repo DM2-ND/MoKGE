@@ -24,7 +24,7 @@ psutil==5.9.0
 
 -- A docker environment could be downloaded from `wenhaoyu97/divgen:5.0`
 
-**We summarize some common environment installation problems and solutions [\[here\]](logits/EnvIssues.pdf)**.
+**We summarize some common environment installation problems and solutions [here](logits/EnvIssues.pdf)**.
 
 ## Preprocess the data
 
@@ -60,7 +60,7 @@ python filter_triple.py $DATA
 
 ## Run MoKGE
 
-Independently parameterizing each expert may exacerbate overfitting since the number of parameters increases linearly with the number of experts. We follow the parameter sharing schema in Cho et al., (2019); Shen et al., (2019) to avoid this issue. This only requires a negligible increase in parameters over the baseline model that does not uses MoE. Speficially, Cho et al., (2019) added a unique expert embedding to each input token, while Shen et al., (2019) added an expert prefix token before the input text sequence.
+-- Independently parameterizing each expert may exacerbate overfitting since the number of parameters increases linearly with the number of experts. We follow the parameter sharing schema in Cho et al., (2019); Shen et al., (2019) to avoid this issue. This only requires a negligible increase in parameters over the baseline model that does not uses MoE. Speficially, Cho et al., (2019) added a unique expert embedding to each input token, while Shen et al., (2019) added an expert prefix token before the input text sequence.
 
 -- MoKGE-embed (Cho et al.,) `bash scripts/KGMixtureOfExpertCho.sh`
 
@@ -77,7 +77,7 @@ Independently parameterizing each expert may exacerbate overfitting since the nu
 }
 ```
 
-**Please kindly cite our paper if you find this paper and the codes helpful.**
+Please kindly cite our paper if you find this paper and the codes helpful.
 
 ## Acknowledgements
 

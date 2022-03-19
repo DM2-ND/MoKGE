@@ -15,8 +15,7 @@ from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data.sampler import RandomSampler
 from transformers.configuration_fsmt import FSMTConfig
-from transformers.file_utils import WEIGHTS_NAME, is_datasets_available
-from transformers.optimization import Adafactor, AdamW, get_linear_schedule_with_warmup
+from transformers.file_utils import WEIGHTS_NAME
 from transformers.modeling_utils import PreTrainedModel
 
 from transformers.trainer_utils import (
@@ -69,13 +68,12 @@ logger = logging.getLogger(__name__)
 
 
 class Seq2SeqTrainer(Trainer):
-    def __init__(self, config, data_args, test_dataset, *args, **kwargs):
+    def __init__(self, config, data_args, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.config = config
         self.data_args = data_args
         self.max_gen_length = data_args.val_max_target_length
         self.vocab_size = self.config.tgt_vocab_size if isinstance(self.config, FSMTConfig) else self.config.vocab_size
-        self.test_dataset = test_dataset
 
     def _get_train_sampler(self) -> Optional[torch.utils.data.sampler.Sampler]:
         if isinstance(self.train_dataset, torch.utils.data.IterableDataset):
@@ -113,7 +111,8 @@ class Seq2SeqTrainer(Trainer):
 
             if self.args.predict_with_generate and not self.args.prediction_loss_only:
                 num_return_sequences = self.data_args.eval_beams if self.data_args.do_sample else None
-                
+                expert_prompt = self.data_args.expert_prompt if hasattr(self.data_args, 'expert_prompt') else None
+
                 generated_tokens = model.generate(
                     input_ids=inputs["input_ids"],
                     attention_mask=inputs["attention_mask"],
@@ -124,6 +123,7 @@ class Seq2SeqTrainer(Trainer):
                     do_sample=self.data_args.do_sample,
                     top_k=self.data_args.top_k,
                     top_p=self.data_args.top_p,
+                    expert_prompt=expert_prompt,
                 )
 
                 # in case the batch is shorter than max length, the output should be padded
@@ -341,9 +341,9 @@ class Seq2SeqTrainer(Trainer):
                     json.dump(metrics, metric_out, indent=1)
 
                 # ''' save the model '''
-                # if metrics[self.args.metric_for_best_model] > self.best_metric:
-                #     self.best_metric = metrics[self.args.metric_for_best_model]
-                #     self._save_training(model, trial, metrics=metrics)
+                if metrics[self.args.metric_for_best_model] > self.best_metric:
+                    self.best_metric = metrics[self.args.metric_for_best_model]
+                    self._save_training(model, trial, metrics=metrics)
 
             if self.args.max_steps > 0 and self.global_step >= self.args.max_steps:
                 break

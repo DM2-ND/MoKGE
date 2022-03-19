@@ -82,7 +82,7 @@ class DataTrainingArguments:
     do_sample: Optional[bool] = field(default=False, metadata={"help": "# Do sampling (multinomial/neclus sampling)."})
 
     # For VAE methods
-    z_dim: Optional[int] = field(default=0, metadata={"help": "z dimensionality for variational auto-encoder"})
+    z_dim: Optional[int] = field(default=32, metadata={"help": "z dimensionality for variational auto-encoder"})
 
     # For MoE methods
     mixtures: Optional[int] = field(default=3, metadata={"help": "number of experts in the model"})
@@ -175,7 +175,6 @@ def main():
     elif model_args.model_type == 'moe' or model_args.model_type == 'kgmoe' :
         data_args.expert_prompt = torch.randint(
             low=1, high=len(tokenizer), size=(data_args.mixtures, data_args.prompt_nums))
-        config.expert_prompt = data_args.expert_prompt
         config.mixtures = data_args.mixtures
         config.mixture_embedding = data_args.mixture_embedding
 
@@ -248,12 +247,11 @@ def main():
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        test_dataset=test_dataset,
         data_collator=Seq2SeqDataCollator(tokenizer, data_args, training_args.tpu_num_cores),
         data_args=data_args,
     )
 
-    # Training
+    # Training (eval during each epoch)
     if training_args.do_train:
         trainer.train(model_path=model_args.model_name_or_path if os.path.isdir(model_args.model_name_or_path) else None)
 
@@ -261,12 +259,12 @@ def main():
     eval_results = {}
     if training_args.do_eval:
 
-        output = trainer.evaluate()
+        output = trainer.evaluate(eval_dataset=test_dataset)
         predictions = output.predictions.tolist()
 
-        out_pred_path = training_args.output_dir + '/output_epoch_pred.txt'
-        out_pred_metric = training_args.output_dir + '/output_metric_pred.txt'
-        out_pred_ref = data_args.data_dir + '/val.target'
+        out_pred_path = training_args.output_dir + '/output_test_pred.txt'
+        out_pred_metric = training_args.output_dir + '/output_test_metric.txt'
+        out_pred_ref = data_args.data_dir + '/test.target'
 
         with open(out_pred_path, 'w') as eval_out:
             for pred in predictions:
@@ -274,32 +272,11 @@ def main():
                         skip_special_tokens=True, clean_up_tokenization_spaces=False)
                 eval_out.write(output_line + '\n')
 
-        metrics = {'epoch': 'eval_mode'}
+        metrics = {'epoch': 'test_metric'}
         metrics.update(eval_accuracy_diversity(out_pred_path, out_pred_ref, data_args.eval_beams))
 
         with open(out_pred_metric, 'w') as metric_out:
             json.dump(metrics, metric_out, indent=1)
-
-    if training_args.do_predict:
-        logging.info("*** Test ***")
-
-        test_output = trainer.predict(test_dataset=test_dataset)
-        test_metrics = {k.replace("eval", "test"): v for k, v in test_output.metrics.items()}
-
-        if trainer.is_world_process_zero():
-            logger.info("***** Test results *****")
-            for key, value in test_metrics.items():
-                logger.info("  %s = %s", key, value)
-
-            save_json(test_metrics, os.path.join(training_args.output_dir, "test_results.json"))
-            eval_results.update(test_metrics)
-
-            if training_args.predict_with_generate:
-                test_preds = tokenizer.batch_decode(
-                    test_output.predictions, skip_special_tokens=True, clean_up_tokenization_spaces=True
-                )
-                test_preds = lmap(str.strip, test_preds)
-                write_txt_file(test_preds, os.path.join(training_args.output_dir, "test_generations.txt"))
 
 
 if __name__ == "__main__":

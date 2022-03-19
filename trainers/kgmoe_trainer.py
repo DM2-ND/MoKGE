@@ -1,30 +1,20 @@
-import json
-import os
 import warnings
 import logging
 from typing import Any, Dict, Optional, Tuple, Union
-from tqdm.auto import tqdm, trange
-import torch.nn.functional as F
+from tqdm.auto import tqdm
 
-import numpy as np
 import torch
+import torch.nn.functional as F
 from packaging import version
 from torch import nn
 from torch.utils.data.dataloader import DataLoader
-from torch.utils.data.distributed import DistributedSampler
 from trainers.seq2seq_trainer import Seq2SeqTrainer
-from transformers.file_utils import WEIGHTS_NAME
-from transformers.modeling_utils import PreTrainedModel
-from collections import Counter
 
 from transformers.trainer_utils import (
     EvalPrediction,
     PredictionOutput,
-    TrainerState,
-    TrainOutput,
     nested_concat,
     nested_numpify,
-    set_seed,
 )
 
 from transformers.integrations import (
@@ -199,7 +189,8 @@ class KGMoESeq2SeqTrainer(Seq2SeqTrainer):
 
             if self.args.predict_with_generate and not self.args.prediction_loss_only:
                 num_return_sequences = self.data_args.eval_beams if self.data_args.do_sample else None
-                
+                expert_prompt = self.data_args.expert_prompt if hasattr(self.data_args, 'expert_prompt') else None
+
                 generated_tokens = model.generate(
                     # Text Input!
                     input_ids=inputs["input_ids"],
@@ -219,6 +210,7 @@ class KGMoESeq2SeqTrainer(Seq2SeqTrainer):
                     do_sample=self.data_args.do_sample,
                     top_k=self.data_args.top_k,
                     top_p=self.data_args.top_p,
+                    expert_prompt=expert_prompt,
                     use_cache=True,
                 )
 

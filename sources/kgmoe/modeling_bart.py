@@ -307,7 +307,6 @@ class BartKGMoEForConditionalGeneration(PretrainedBartModel):
         super().__init__(config)
         base_model = BartMoEModel(config)
         self.model = base_model
-        self.expert_prompt = config.expert_prompt
         self.register_buffer("final_logits_bias", torch.zeros((1, self.model.shared.num_embeddings)))
 
         self.kg_output_layer = nn.Sequential(nn.Linear(config.d_model, config.d_model),
@@ -481,6 +480,7 @@ class BartKGMoEForConditionalGeneration(PretrainedBartModel):
         attention_mask=None,
         decoder_start_token_id=None,
         use_cache=None,
+        expert_prompt=None,
         # KG Inputs!
         concept_ids: Optional[torch.LongTensor] = None,
         concept_labels: Optional[torch.LongTensor] = None,
@@ -672,7 +672,7 @@ class BartKGMoEForConditionalGeneration(PretrainedBartModel):
                 lm_mixture_ids = mixture_tmp.expand(input_ids.shape)
                 encoder_outputs = text_encoder(input_ids, mixture_ids=lm_mixture_ids, attention_mask=attention_mask, return_dict=True)
             else: # use prompt for different experts
-                input_ids_prompt = self.expert_prompt.repeat(_batch_size, 1).to(input_ids.device)
+                input_ids_prompt = expert_prompt.repeat(_batch_size, 1).to(input_ids.device)
                 attention_prompt = torch.full(input_ids_prompt.shape, 1).to(attention_mask.device)
                 
                 input_ids = torch.cat([input_ids_prompt, input_ids], dim=1)

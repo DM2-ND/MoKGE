@@ -21,7 +21,6 @@ option="
     --fp16 
     --do_train 
     --do_eval 
-    --do_predict
     --eval_beams 3 
     --do_sample 
     --top_p ${P}
@@ -36,5 +35,5 @@ option="
 
 cmd="python3 main.py ${option}"
 
-echo $cmd
+cd ..
 eval $cmd

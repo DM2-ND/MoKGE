@@ -279,7 +279,6 @@ class BartMoEForConditionalGeneration(PretrainedBartModel):
         super().__init__(config)
         base_model = BartMoEModel(config)
         self.model = base_model
-        self.expert_prompt = config.expert_prompt
         self.register_buffer("final_logits_bias", torch.zeros((1, self.model.shared.num_embeddings)))
 
     def resize_token_embeddings(self, new_num_tokens: int) -> nn.Embedding:
@@ -426,6 +425,7 @@ class BartMoEForConditionalGeneration(PretrainedBartModel):
         attention_mask=None,
         decoder_start_token_id=None,
         use_cache=None,
+        expert_prompt=None,
         **model_kwargs
     ) -> torch.LongTensor:
 
@@ -578,7 +578,7 @@ class BartMoEForConditionalGeneration(PretrainedBartModel):
                 mixture_ids = mixture_ids.expand(input_ids.shape)
                 encoder_outputs = encoder(input_ids, mixture_ids=mixture_ids, attention_mask=attention_mask, return_dict=True)
             else: # use prompt for different experts
-                input_ids_prompt = self.expert_prompt.repeat(_batch_size, 1).to(input_ids.device)
+                input_ids_prompt = expert_prompt.repeat(_batch_size, 1).to(input_ids.device)
                 attention_prompt = torch.full(input_ids_prompt.shape, 1).to(attention_mask.device)
                 
                 input_ids = torch.cat([input_ids_prompt, input_ids], dim=1)
