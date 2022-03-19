@@ -55,8 +55,8 @@ python filter_triple.py $DATA
 | Truncated Sampling | `bash scripts/TruncatedSampling.sh` | Fan et al., ACL 2018 [\[PDF\]](https://aclanthology.org/P18-1082.pdf) |
 | Nucleus Sampling | `bash scripts/NucleusSampling.sh` | Holtzman et al., ICLR 2020 [\[PDF\]](https://openreview.net/forum?id=rygGQyrFvH) |
 | Variational AutoEncoder | `bash scripts/VariationalAutoEncoder.sh` | Gupta et al., AAAI 2018 [\[PDF\]](https://ojs.aaai.org/index.php/AAAI/article/view/11956) |
-| Mixture of Experts (MoE-embed) | `bash scripts/MixtureOfExpertCho.sh` | Cho et al., EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
-| Mixture of Experts (MoE-prompt) | `bash scripts/MixtureOfExpertShen.sh` | Shen et al., ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
+| Mixture of Experts <br /> (MoE-embed) | `bash scripts/MixtureOfExpertCho.sh` | Cho et al., EMNLP 2019 [\[PDF\]](https://aclanthology.org/D19-1308/) |
+| Mixture of Experts <br /> (MoE-prompt) | `bash scripts/MixtureOfExpertShen.sh` | Shen et al., ICML 2019 [\[PDF\]](http://proceedings.mlr.press/v97/shen19c.html) |
 
 ## Run MoKGE
 
