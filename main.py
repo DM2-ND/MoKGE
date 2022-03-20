@@ -256,10 +256,9 @@ def main():
         trainer.train(model_path=model_args.model_name_or_path if os.path.isdir(model_args.model_name_or_path) else None)
 
     # Evaluation (on test set)
-    eval_results = {}
     if training_args.do_eval:
 
-        output = trainer.evaluate(eval_dataset=test_dataset)
+        output = trainer.predict(test_dataset=test_dataset)
         predictions = output.predictions.tolist()
 
         out_pred_path = training_args.output_dir + '/output_test_pred.txt'

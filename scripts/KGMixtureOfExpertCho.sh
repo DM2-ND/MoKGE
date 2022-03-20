@@ -21,6 +21,7 @@ option="
     --fp16 
     --do_train 
     --do_eval 
+    --do_predict 
     --eval_beams 3 
     --per_device_train_batch_size 60
     --per_device_eval_batch_size 60
