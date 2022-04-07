@@ -95,7 +95,6 @@ def eval_accuracy_diversity(hyp_path, ref_path, step):
     metrics = {}
 
     metrics.update(eval_top1_acc(hyp_path, ref_path, step))
-    metrics.update(eval_top1_acc(hyp_path, ref_path, step))
     metrics.update(eval_topk_acc(hyp_path, ref_path, step))
     metrics.update(eval_self_bleu(hyp_path, step))
     metrics.update(eval_entropy_distinct(hyp_path))

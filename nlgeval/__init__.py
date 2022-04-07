@@ -14,22 +14,10 @@ from nlgeval.pycocoevalcap.rouge.rouge import Rouge
 def _strip(s):
     return s.strip()
 
-def _split_ref(ref_list):
-    idx2list = defaultdict(list)
-    ref_set = set([len(ref.split('\t')) for ref in ref_list])
-    assert len(ref_set) == 1
-    for ref in ref_list:
-        refs = ref.split('\t')
-        for i, r in enumerate(refs):
-            idx2list[i].append(r)
-    return list(idx2list.values())
 
 def compute_metrics(hyp_list, ref_list, no_overlap=False):
-    if isinstance(ref_list[0], six.string_types):
-        ref_list = _split_ref(ref_list)
-
-    ref_list = [list(map(_strip, refs)) for refs in zip(*ref_list)]
-    refs = {idx: strippedlines for (idx, strippedlines) in enumerate(ref_list)}
+    
+    refs = {idx: lines.strip().split('\t') for (idx, lines) in enumerate(ref_list)}
     hyps = {idx: [lines.strip()] for (idx, lines) in enumerate(hyp_list)}
     assert len(refs) == len(hyps)
 
