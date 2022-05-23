@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
     read_model_vocab(config["paths"]["gpt2_vocab"])
 
-    for TYPE in ['train', 'dev', 'test']:
+    for TYPE in ['train', 'val', 'test']:
         src = read_csv(SRC_FILE.format(TYPE))
         tgt = read_csv(TGT_FILE.format(TYPE))
         grounding_sentences(src, tgt, TYPE, DATA_PATH)

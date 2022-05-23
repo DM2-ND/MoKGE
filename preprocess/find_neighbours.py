@@ -160,7 +160,7 @@ def load_total_concepts(data_path):
     global concept2id, total_concepts_id, config
     total_concepts = []
     total_concepts_id = []
-    for path in [data_path + "/train.concepts_nv.json", data_path + "/dev.concepts_nv.json"]:
+    for path in [data_path + "/train.concepts_nv.json", data_path + "/val.concepts_nv.json"]:
         with open(path, 'r') as f:
             for line in f.readlines():
                 line = json.loads(line)
@@ -189,5 +189,5 @@ if __name__ == "__main__":
     load_total_concepts(DATA_PATH)
 
     process(DATA_PATH + "/train.concepts_nv.json", DATA_PATH + "/train.{}hops_{}_triple.json".format(T, max_B), T, max_B)
-    process(DATA_PATH + "/dev.concepts_nv.json", DATA_PATH + "/dev.{}hops_{}_triple.json".format(T, max_B), T, max_B)
+    process(DATA_PATH + "/val.concepts_nv.json", DATA_PATH + "/val.{}hops_{}_triple.json".format(T, max_B), T, max_B)
     process(DATA_PATH + "/test.concepts_nv.json", DATA_PATH + "/test.{}hops_{}_triple.json".format(T, max_B), T, max_B)

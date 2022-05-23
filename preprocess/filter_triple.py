@@ -123,7 +123,7 @@ if __name__ == "__main__":
     T, max_B = 2, 100
 
     total_concepts = []
-    for TYPE in ['train', 'dev', 'test']:
+    for TYPE in ['train', 'val', 'test']:
         data = read_json(DATA_PATH + '/{}.{}hops_{}_triple.json'.format(TYPE, T, max_B))
         f_data, f_concepts = filter_directed_triple(data, max_concepts=400, max_triples=1000)
         total_concepts += f_concepts
