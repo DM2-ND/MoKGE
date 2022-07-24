@@ -9,7 +9,7 @@ OUTPUT_DIR=${}
 option="
     --data_dir ${INPUT_DIR}/${DATASET}
     --model_name_or_path facebook/bart-base  
-    --model_type moe
+    --model_type kgmoe
     --output_dir ${OUTPUT_DIR}/KGMixtureOfExpertShen_Output
     --max_source_length 40
     --max_target_length 60 
