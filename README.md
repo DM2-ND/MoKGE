@@ -48,6 +48,8 @@ python find_neighbours.py $DATA
 python filter_triple.py $DATA
 ```
 
+-- Download pre-processed data if you do not want process by yourself. [\[GoogleDrive\]](https://drive.google.com/drive/folders/1yDtZQSgK7-W7fBXGSnHFAmjaTCS97umJ?usp=sharing)
+
 ## Run Baseline
 
 | Baseline Name | Run Baseline Model | Venue and Reference |
