@@ -1,8 +1,14 @@
-import math
-import nltk
-from tqdm import tqdm
 import configparser
 import networkx as nx
+import itertools
+import math
+import random
+import json
+from tqdm import tqdm
+import sys
+import time
+import timeit
+import nltk
 
 nltk.download('stopwords')
 nltk_stopwords = nltk.corpus.stopwords.words('english')
@@ -14,6 +20,7 @@ config.read("paths.cfg")
 cpnet, concept2id, relation2id = None, None, None
 id2relation, id2concept = None, None
 blacklist = set(["uk", "us", "take", "make", "object", "person", "people"])
+
 
 def load_resources():
     global concept2id, relation2id, id2relation, id2concept
@@ -67,8 +74,9 @@ def save_cpnet():
             graph.add_edge(subj, obj, rel=rel, weight=weight)
             graph.add_edge(obj, subj, rel=rel+len(relation2id), weight=weight)
 
-    nx.write_gpickle(graph, config["paths"]["conceptnet_en_graph"])
 
+    nx.write_gpickle(graph, config["paths"]["conceptnet_en_graph"])
+    
 
 if __name__ == "__main__":
     save_cpnet()

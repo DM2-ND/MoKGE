@@ -1,7 +1,8 @@
-import sys
 import json
 from tqdm import tqdm
+import collections
 import configparser
+import sys
 from collections import Counter
 
 config = configparser.ConfigParser()
@@ -14,11 +15,13 @@ def read_json(filename):
             data.append(json.loads(line))
     return data
 
+
 def save_json(data, filename):
     with open(filename, 'w') as f:
         for line in data:
             json.dump(line, f)
             f.write('\n')
+
 
 def filter_directed_triple(data, max_concepts=200, max_triples=300):
     _data, _concepts = [], []
@@ -46,6 +49,7 @@ def filter_directed_triple(data, max_concepts=200, max_triples=300):
         for l, c in zip(labels, concepts):
             if l == 1:
                 starts.append(c)
+
         sources = []
         for d, c in zip(distances, concepts):
             if d == 0:
@@ -54,6 +58,7 @@ def filter_directed_triple(data, max_concepts=200, max_triples=300):
         shortest_paths = []
         for start in starts:
             shortest_paths.extend(bfs(start, triple_dict, sources))
+
         ground_truth_triples = []
         for path in shortest_paths:
             for i, n in enumerate(path[:-1]):
@@ -63,7 +68,7 @@ def filter_directed_triple(data, max_concepts=200, max_triples=300):
 
         _triples = []
         triple_labels = []
-        for _, v in triple_dict.items():
+        for k,v in triple_dict.items():
             for t in v:
                 _triples.append(t)
                 if (t[-1], t[0]) in ground_truth_triples_set:
@@ -75,11 +80,12 @@ def filter_directed_triple(data, max_concepts=200, max_triples=300):
         _triples = _triples[:max_triples]
         triple_labels = triple_labels[:max_triples]
         
-        heads, tails = [], []
+        heads = []
+        tails = []
         for triple in _triples:
             heads.append(concepts.index(triple[0]))
             tails.append(concepts.index(triple[-1]))
-    
+        
         max_len = max(max_len, len(_triples))
         e['relations'] = [x[1] for x in _triples]
         e['head_ids'] = heads
@@ -88,11 +94,13 @@ def filter_directed_triple(data, max_concepts=200, max_triples=300):
         e.pop('triples')
         
         _data.append(e)
-
+    
     return _data, _concepts
+
 
 def bfs(start, triple_dict, source):
     paths = [[[start]]]
+    stop = False
     shortest_paths = []
     count = 0
     while 1:
@@ -106,6 +114,7 @@ def bfs(start, triple_dict, source):
 
         for path in new_paths:
             if path[-1] in source:
+                stop = True
                 shortest_paths.append(path)
         
         if count == 2:
